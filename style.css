@@ -13,9 +13,6 @@
 
 :root {
     font-size: 20px;
-
-    --diluted-black: rgb(0,0,0, .75);
-    --contrast-text-color: rgb(255,255,255);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -27,9 +24,6 @@
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-
-  display: flex;
-  flex-direction: column;
 }
 
 img, picture, video, canvas, svg {
@@ -68,15 +62,186 @@ a {
 
 /* Everything above is CSS reset */
 
+:root {
+    --diluted-black: rgb(0,0,0, .75);
+    --contrast-text-color: rgb(255,255,255);
+    --not-read-color: rgb(255, 102, 102);
+    --read-color: rgb(0, 204, 136);
+}
+
+body {
+  height: 100vh;
+  font-family: "Germania One";
+
+  display: grid;
+  grid-template-rows: 70px 1fr 70px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.library-title {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.library-title > img {
+  margin-right: 10px;
+  display: inline;
+  height: 3rem;
+  width: 3rem;
+}
+
+.content-section {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+}
+
+.highlighted-book {
+  align-self: center;
+  display: grid;
+  grid-template-columns: 20rem 15rem;
+  grid-template-rows: 3rem 5rem 3rem 2rem 3rem;
+  column-gap: 50px;
+}
+
+.highlighted-book-img {
+  display: flex;
+  align-items: center;
+
+  grid-column: 1/-1;
+  grid-row: 1/-1;
+}
+
+.highlighted-book-title {
+  display: flex;
+  align-items: center;
+  
+  grid-column: 2;
+  grid-row: 2;
+
+  font-size: 2rem;
+}
+
+.highlighted-book-author {
+  display: flex;
+  align-items: center;
+
+  grid-column: 2;
+  grid-row: 3;
+  
+  font-size: 1.5rem;
+}
+
+.highlighted-book-year {
+  display: flex;
+  align-items: center;
+
+  grid-column: 2;
+  grid-row: 4;
+
+  font-size: 1.5rem;
+}
+
+.highlighted-book-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+
+  height: 50px;
+  width: 200px;
+  border-radius: 20px;
+  border: none;
+
+  grid-column: 2;
+  grid-row: 5;
+
+  font-size: 1rem;
+  color: white;
+}
+
 .footer {
-    margin-top: auto;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     background-color: var(--diluted-black);
     color: var(--contrast-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 25px;
+}
+
+.footer a {
+  display: flex;
+  align-items: center;
+  margin: 0 5px;
+}
+
+.footer p {
+  display: flex;
+  align-items: center;
+}
+
+.library-icon {
+  width: 5rem;
+  height: 5rem;
 }
 
 .git {
     display: inline;
-    width: 3rem;
-    height: 3rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: 20px;
+}
+
+.highlighted-book-img {
+  width: 20rem;
+  height: 20rem;
+}
+
+.book-card {
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 300px;
+  height: 350px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.shelved-book {
+  width: 7rem;
+  height: 7rem;
+}
+
+.shelved-book-title {
+  font-size: 1.3rem;
+}
+
+.shelved-book-author,
+.shelved-book-year {
+  font-size: 1.1rem;
+}
+
+.shelved-book-status {
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.15rem;
+  padding: 10px;
+
+}
+
+.not-read {
+  background-color: var(--not-read-color);
+}
+
+.read {
+  background-color: var(--read-color);
 }
