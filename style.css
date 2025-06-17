@@ -98,11 +98,12 @@ body {
 
 .content-section {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 3fr 4fr;
+  align-items: center;
 }
 
 .highlighted-book {
-  align-self: center;
+  justify-self: center;
   display: grid;
   grid-template-columns: 20rem 15rem;
   grid-template-rows: 3rem 5rem 3rem 2rem 3rem;
@@ -165,6 +166,15 @@ body {
   color: white;
 }
 
+.list-of-books {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 300px);
+  grid-template-rows: repeat(2, 350px);
+  grid-auto-flow: column;
+  column-gap: 50px;
+  row-gap: 60px;
+}
+
 .footer {
     font-size: 1.1rem;
     background-color: var(--diluted-black);
@@ -193,8 +203,8 @@ body {
 
 .git {
     display: inline;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
     margin-left: 20px;
 }
 
