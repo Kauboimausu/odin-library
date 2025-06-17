@@ -1,6 +1,7 @@
 const myLibrary = [];
 const listOfBooks = document.querySelector(".list-of-books");
 
+
 function Book(name, author, yearPublished, readStatus){
     this.name = name;
     this.author = author;
@@ -8,6 +9,8 @@ function Book(name, author, yearPublished, readStatus){
     this.readStatus = readStatus;
     this.id = crypto.randomUUID();
 }
+
+
 
 function addBookToLibrary(name, author, yearPublished, readStatus = false) {
 
@@ -63,6 +66,7 @@ function addBookToLibrary(name, author, yearPublished, readStatus = false) {
     myLibrary.push(bookToAdd);
 }
 
+
 // Function that changes the displayed book to the library book that was clicked
 function changeHighlightedBook(name, author, year, status, image = null){
     const highlightedBookName = document.querySelector(".highlighted-book-title");
@@ -83,6 +87,7 @@ function changeHighlightedBook(name, author, year, status, image = null){
     }
 }
 
+
 // Function that adds a few books to the page
 function createInitialLibrary() {
     addBookToLibrary("War and Peace", "Leo Tolstoy", "1867");
@@ -90,4 +95,75 @@ function createInitialLibrary() {
     addBookToLibrary("Dracula", "Bram Stoker", "1897");
 }
 
+
 createInitialLibrary();
+
+
+
+// We select the add a new book element
+
+const addNewBook = document.querySelector(".add-book");
+
+// Creates the form element
+function createFormElement(){
+
+    let form = document.createElement("form");
+    form.id = "new-book-form";
+
+    let nameLabel = document.createElement("label");
+    let nameInput = document.createElement("input");
+    nameLabel.for = "new-book-name";
+    nameLabel.textContent = "Book Name: ";
+    nameInput.id = "new-book-name";
+    nameInput.type = "text";
+    nameInput.name = "new-book-name"
+
+    let authorLabel = document.createElement("label");
+    let authorInput = document.createElement("input");
+    authorLabel.for = "new-book-author";
+    authorLabel.textContent = "Author Name: ";
+    authorInput.id = "new-book-author";
+    authorInput.type = "text"
+    authorInput.name = "new-book-author";
+
+    let yearLabel = document.createElement("label");
+    let yearInput = document.createElement("input");
+    yearLabel.for = "new-book-year";
+    yearLabel.textContent = "Year Released";
+    yearInput.id = "new-book-year";
+    yearInput,type = "text";
+    yearInput.name = "new-book-year";
+
+    let formButton = document.createElement("button");
+    formButton.textContent = "Submit Book";
+    formButton.classList.add("form-button");
+
+    // First we'll remove the old elements from the card
+    let addIcon = document.querySelector(".add-icon");
+    let addBookParagraph = document.querySelector(".add-book-paragraph");
+    addIcon.remove();
+    addBookParagraph.remove();
+
+    // Now we'll add the form with all its fields
+
+    form.appendChild(nameLabel);
+    form.appendChild(nameInput);
+
+    form.appendChild(authorLabel);
+    form.appendChild(authorInput);
+
+    form.appendChild(yearLabel);
+    form.appendChild(yearInput);
+
+    form.appendChild(formButton);
+
+    addNewBook.appendChild(form);
+
+}
+
+// We'll add an even listener to add a new book when the element is clicked
+// The way we'll do this is by displaying the form inside the element itself
+
+addNewBook.addEventListener("click", () => {
+    createFormElement();
+});

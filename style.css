@@ -67,6 +67,7 @@ a {
     --contrast-text-color: rgb(255,255,255);
     --not-read-color: rgb(255, 102, 102);
     --read-color: rgb(0, 204, 136);
+    --header-background: rgb(255, 195, 77);
 }
 
 body {
@@ -74,13 +75,14 @@ body {
   font-family: "Germania One";
 
   display: grid;
-  grid-template-rows: 70px 1fr 70px;
+  grid-template-rows: 80px 1fr 70px;
 }
 
 .header {
   display: flex;
   align-items: center;
   padding-left: 20px;
+  background-color: var(--header-background);
 }
 
 .library-title {
@@ -175,6 +177,55 @@ body {
   row-gap: 60px;
 }
 
+.book-card {
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 300px;
+  height: 350px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.add-book {
+  border: 2px solid black;
+  border-radius: 25px;
+  width: 300px;
+  height: 350px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  font-size: 2rem;
+}
+
+#new-book-form {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+}
+
+#new-book-form > input{
+  padding-left: 5px;
+}
+
+.form-button {
+  margin-top: 20px;
+  background-color: var(--header-background);
+  border: none;
+  font-size: 1.2rem;
+  padding: 10px;
+  border-radius: 50px;
+}
+
+#new-book-form > input {
+  border-radius: 20px;
+}
+
 .footer {
     font-size: 1.1rem;
     background-color: var(--diluted-black);
@@ -201,6 +252,11 @@ body {
   height: 5rem;
 }
 
+.add-icon {
+  width: 8rem;
+  height: 8rem;
+}
+
 .git {
     display: inline;
     width: 2.25rem;
@@ -211,18 +267,6 @@ body {
 .highlighted-book-img {
   width: 20rem;
   height: 20rem;
-}
-
-.book-card {
-  border: 2px solid black;
-  border-radius: 25px;
-  width: 300px;
-  height: 350px;
-
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 5px;
 }
 
 .shelved-book {
