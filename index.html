@@ -28,8 +28,21 @@
 
         <ul class="list-of-books">
             <li class="add-book">
-                <img src="src/plus.png" alt="A plus sign" class="add-icon">
-                <p class="add-book-paragraph">Add Book</p>
+                <h4>Add New Book</h4>
+                <form action="script.js" id="new-book-form">
+                    <label for="new-book-name">Book Name: </label>
+                    <input type="text" id="new-book-name" name="new-book-name">
+                    <label for="new-book-author">Author: </label>
+                    <input type="text" id="new-book-author" name="new-book-author">
+                    <label for="new-book-year">Year Published: </label>
+                    <input type="number" id="new-book-year" name="new-book-year" min="-3000" max="2025" title="Number can only have 4 digits, use - if book was written in BC">
+                    <div class="checkbox-div">
+                        <label for="new-book-status">Read</label>
+                        <input type="checkbox" id="new-book-status" name="new-book-status">
+                    </div>
+
+                    <button type="submit" class="form-button">Submit Book</button>
+                </form>
             </li>
         </ul>
 

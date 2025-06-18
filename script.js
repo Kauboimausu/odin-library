@@ -1,16 +1,69 @@
-const myLibrary = [];
+let myLibrary = [];
 const listOfBooks = document.querySelector(".list-of-books");
 
 
-function Book(name, author, yearPublished, readStatus){
-    this.name = name;
-    this.author = author;
-    this.yearPublished = yearPublished;
-    this.readStatus = readStatus;
-    this.id = crypto.randomUUID();
+class Book {
+    constructor(name, author, yearPublished, readStatus, id) {
+        this.name = name;
+        this.author = author;
+        this.yearPublished = yearPublished;
+        this.readStatus = readStatus;
+        this.id = id;
+    }
 }
 
+Book.prototype.toggleStatus = function() {
+    
+    // We toggle the status of the book
+    this.readStatus = !this.readStatus;
 
+    // Then we'll change the UI to reflect the new status
+
+    const cardStatusButton = document.getElementById("" + this.id).lastChild;
+    if (this.readStatus){
+        console.log("Card Updated");
+        cardStatusButton.classList.remove("not-read");
+        cardStatusButton.classList.add("read");
+        cardStatusButton.textContent = "Read";
+    } else {
+        console.log("Card Updated");
+        cardStatusButton.classList.remove("read");
+        cardStatusButton.classList.add("not-read");
+        cardStatusButton.textContent = "Not Read";
+    }
+
+    // Next we'll change the highlighted book if necessary
+    // Note that this is not a perfect solution since 2 books can have the same name
+
+    const highlightedBookTitle = document.querySelector(".highlighted-book-title").textContent;
+    if(this.name === highlightedBookTitle) {
+        const highlightedBookStatus = document.querySelector(".highlighted-book-status");
+        if(highlightedBookStatus.classList.contains("read")) {
+            console.log("Highlight Updated");
+            highlightedBookStatus.textContent = "Not Read";
+            highlightedBookStatus.classList.add("not-read");
+            highlightedBookStatus.classList.remove("read");
+        } else {
+            console.log("Highlight Updated");
+            highlightedBookStatus.textContent = "Read";
+            highlightedBookStatus.classList.add("read");
+            highlightedBookStatus.classList.remove("not-read");
+        }
+    }
+
+};
+
+// Function that toggles the status of the book
+function removeBookWithID(id){
+    // First we toggle the status of the object
+    myLibrary = myLibrary.filter(book => book.id != id);
+    // Then we'll change the graphical elements that indicate the status of the book
+
+}
+
+function toggleStatusAux(bookToChange){
+    bookToChange.toggleStatus();
+}
 
 function addBookToLibrary(name, author, yearPublished, readStatus = false) {
 
@@ -18,9 +71,18 @@ function addBookToLibrary(name, author, yearPublished, readStatus = false) {
     let newBookCard = document.createElement("li");
     newBookCard.classList.add("book-card");
 
-    let bookToAdd = new Book(name, author, yearPublished, readStatus);
+    // We'll also generate an ID for the book 
+
+    let bookID = crypto.randomUUID();
+    newBookCard.id = bookID;
+
+    let bookToAdd = new Book(name, author, yearPublished, readStatus, bookID);
 
     // We'll create each of the elements that go in our book's card
+
+    let deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-book");
+    deleteButton.textContent = "Delete";
 
     let bookImage = document.createElement("img");
     bookImage.classList.add("shelved-book");
@@ -48,7 +110,15 @@ function addBookToLibrary(name, author, yearPublished, readStatus = false) {
     }
     bookStatus.classList.add("shelved-book-status");
 
+    // We'll add an event listener to the delete button
+
+    deleteButton.addEventListener("click", () => {
+        removeBookWithID(bookID);
+        newBookCard.remove();
+    });
+
     // Now we'll append the elements to the card 
+    newBookCard.append(deleteButton);
     newBookCard.append(bookImage);
     newBookCard.append(bookName);
     newBookCard.append(bookAuthor);
@@ -58,17 +128,21 @@ function addBookToLibrary(name, author, yearPublished, readStatus = false) {
     // Before appending the card to the list we'll add an even listener
 
     newBookCard.addEventListener("click", () => {
-        changeHighlightedBook(name, author, yearPublished, readStatus);
+        changeHighlightedBook(name, author, yearPublished, readStatus, bookID);
     });
 
     listOfBooks.append(newBookCard);
     
     myLibrary.push(bookToAdd);
+
+    // We'll add an event listener to the book status button
+
+    bookStatus.addEventListener("click", toggleStatusAux(bookToAdd), {capture: true});
 }
 
 
 // Function that changes the displayed book to the library book that was clicked
-function changeHighlightedBook(name, author, year, status, image = null){
+function changeHighlightedBook(name, author, year, status, bookID){
     const highlightedBookName = document.querySelector(".highlighted-book-title");
     highlightedBookName.textContent = name;
     const highlightedBookAuthor = document.querySelector(".highlighted-book-author");
@@ -76,6 +150,7 @@ function changeHighlightedBook(name, author, year, status, image = null){
     const highlightedBookYear = document.querySelector(".highlighted-book-year");
     highlightedBookYear.textContent = year;
     const highlightedBookStatus = document.querySelector(".highlighted-book-status");
+
     if(status) {
         highlightedBookStatus.textContent = "Read";
         highlightedBookStatus.classList.remove("not-read");
@@ -85,6 +160,10 @@ function changeHighlightedBook(name, author, year, status, image = null){
         highlightedBookStatus.classList.remove("read");
         highlightedBookStatus.classList.add("not-read");
     }
+
+    let book = myLibrary.find(book => book.id === bookID);
+
+    highlightedBookStatus.addEventListener("click", toggleStatusAux(book), {capture: true});
 }
 
 
@@ -100,70 +179,27 @@ createInitialLibrary();
 
 
 
-// We select the add a new book element
+// We select the add a new book form element
 
-const addNewBook = document.querySelector(".add-book");
+const addNewBook = document.querySelector("#new-book-form");
 
-// Creates the form element
-function createFormElement(){
+// We'll create the asynchronous function to handle new book submissions
 
-    let form = document.createElement("form");
-    form.id = "new-book-form";
+async function handleNewBook(){
 
-    let nameLabel = document.createElement("label");
-    let nameInput = document.createElement("input");
-    nameLabel.for = "new-book-name";
-    nameLabel.textContent = "Book Name: ";
-    nameInput.id = "new-book-name";
-    nameInput.type = "text";
-    nameInput.name = "new-book-name"
+    let newBookData = new FormData(addNewBook);
+    console.log(newBookData);
+    let bookTitle = newBookData.get("new-book-name");
+    let bookAuthor = newBookData.get("new-book-author");
+    let bookYear = newBookData.get("new-book-year");
+    let bookStatus = newBookData.get("new-book-status");
 
-    let authorLabel = document.createElement("label");
-    let authorInput = document.createElement("input");
-    authorLabel.for = "new-book-author";
-    authorLabel.textContent = "Author Name: ";
-    authorInput.id = "new-book-author";
-    authorInput.type = "text"
-    authorInput.name = "new-book-author";
-
-    let yearLabel = document.createElement("label");
-    let yearInput = document.createElement("input");
-    yearLabel.for = "new-book-year";
-    yearLabel.textContent = "Year Released";
-    yearInput.id = "new-book-year";
-    yearInput,type = "text";
-    yearInput.name = "new-book-year";
-
-    let formButton = document.createElement("button");
-    formButton.textContent = "Submit Book";
-    formButton.classList.add("form-button");
-
-    // First we'll remove the old elements from the card
-    let addIcon = document.querySelector(".add-icon");
-    let addBookParagraph = document.querySelector(".add-book-paragraph");
-    addIcon.remove();
-    addBookParagraph.remove();
-
-    // Now we'll add the form with all its fields
-
-    form.appendChild(nameLabel);
-    form.appendChild(nameInput);
-
-    form.appendChild(authorLabel);
-    form.appendChild(authorInput);
-
-    form.appendChild(yearLabel);
-    form.appendChild(yearInput);
-
-    form.appendChild(formButton);
-
-    addNewBook.appendChild(form);
-
+    addBookToLibrary(bookTitle, bookAuthor, bookYear, bookStatus);
 }
 
-// We'll add an even listener to add a new book when the element is clicked
-// The way we'll do this is by displaying the form inside the element itself
+// We'll add an even listener when the form is submitted
 
-addNewBook.addEventListener("click", () => {
-    createFormElement();
+addNewBook.addEventListener("submit", (e) => {
+    e.preventDefault();
+    handleNewBook();
 });
