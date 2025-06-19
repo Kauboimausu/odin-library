@@ -21,12 +21,12 @@ Book.prototype.toggleStatus = function() {
 
     const cardStatusButton = document.getElementById("" + this.id).lastChild;
     if (this.readStatus){
-        console.log("Card Updated");
+        // console.log("Card Updated");
         cardStatusButton.classList.remove("not-read");
         cardStatusButton.classList.add("read");
         cardStatusButton.textContent = "Read";
     } else {
-        console.log("Card Updated");
+        // console.log("Card Updated");
         cardStatusButton.classList.remove("read");
         cardStatusButton.classList.add("not-read");
         cardStatusButton.textContent = "Not Read";
@@ -39,17 +39,20 @@ Book.prototype.toggleStatus = function() {
     if(this.name === highlightedBookTitle) {
         const highlightedBookStatus = document.querySelector(".highlighted-book-status");
         if(highlightedBookStatus.classList.contains("read")) {
-            console.log("Highlight Updated");
+            // console.log("Highlight Updated");
             highlightedBookStatus.textContent = "Not Read";
             highlightedBookStatus.classList.add("not-read");
             highlightedBookStatus.classList.remove("read");
         } else {
-            console.log("Highlight Updated");
+            // console.log("Highlight Updated");
             highlightedBookStatus.textContent = "Read";
             highlightedBookStatus.classList.add("read");
             highlightedBookStatus.classList.remove("not-read");
         }
     }
+
+    console.log(this.readStatus);
+    
 
 };
 
@@ -57,13 +60,8 @@ Book.prototype.toggleStatus = function() {
 function removeBookWithID(id){
     // First we toggle the status of the object
     myLibrary = myLibrary.filter(book => book.id != id);
-    // Then we'll change the graphical elements that indicate the status of the book
-
 }
 
-function toggleStatusAux(bookToChange){
-    bookToChange.toggleStatus();
-}
 
 function addBookToLibrary(name, author, yearPublished, readStatus = false) {
 
@@ -112,7 +110,8 @@ function addBookToLibrary(name, author, yearPublished, readStatus = false) {
 
     // We'll add an event listener to the delete button
 
-    deleteButton.addEventListener("click", () => {
+    deleteButton.addEventListener("click", (e) => {
+        e.stopPropagation();
         removeBookWithID(bookID);
         newBookCard.remove();
     });
@@ -137,9 +136,11 @@ function addBookToLibrary(name, author, yearPublished, readStatus = false) {
 
     // We'll add an event listener to the book status button
 
-    bookStatus.addEventListener("click", toggleStatusAux(bookToAdd), {capture: true});
+    bookStatus.addEventListener("click", (e) => {
+        e.stopPropagation();
+        bookToAdd.toggleStatus();
+    });
 }
-
 
 // Function that changes the displayed book to the library book that was clicked
 function changeHighlightedBook(name, author, year, status, bookID){
@@ -149,21 +150,33 @@ function changeHighlightedBook(name, author, year, status, bookID){
     highlightedBookAuthor.textContent = author;
     const highlightedBookYear = document.querySelector(".highlighted-book-year");
     highlightedBookYear.textContent = year;
+
+    // First we'll delete the previous status button, this is so we can create a new one with new eventListeners
     const highlightedBookStatus = document.querySelector(".highlighted-book-status");
+    highlightedBookStatus.remove();
+
+    const newHighlightedBookStatus = document.createElement("button");
+    newHighlightedBookStatus.classList.add("highlighted-book-status");
 
     if(status) {
-        highlightedBookStatus.textContent = "Read";
-        highlightedBookStatus.classList.remove("not-read");
-        highlightedBookStatus.classList.add("read");
+        newHighlightedBookStatus.textContent = "Read";
+        // newHighlightedBookStatus.classList.remove("not-read");
+        newHighlightedBookStatus.classList.add("read");
     } else {
-        highlightedBookStatus.textContent = "Not Read";
-        highlightedBookStatus.classList.remove("read");
-        highlightedBookStatus.classList.add("not-read");
+        newHighlightedBookStatus.textContent = "Not Read";
+        // newHighlightedBookStatus.classList.remove("read");
+        newHighlightedBookStatus.classList.add("not-read");
     }
+
+    const highlightedBook = document.querySelector(".highlighted-book");
+    highlightedBook.append(newHighlightedBookStatus);
 
     let book = myLibrary.find(book => book.id === bookID);
 
-    highlightedBookStatus.addEventListener("click", toggleStatusAux(book), {capture: true});
+    newHighlightedBookStatus.addEventListener("click", (e) => {
+        e.stopPropagation();
+        book.toggleStatus();
+    });
 }
 
 
