@@ -2,14 +2,13 @@ let myLibrary = [];
 const listOfBooks = document.querySelector(".list-of-books");
 
 
-class Book {
-    constructor(name, author, yearPublished, readStatus, id) {
+
+function Book(name, author, yearPublished, readStatus, id) {
         this.name = name;
         this.author = author;
         this.yearPublished = yearPublished;
         this.readStatus = readStatus;
         this.id = id;
-    }
 }
 
 Book.prototype.toggleStatus = function() {
@@ -52,9 +51,9 @@ Book.prototype.toggleStatus = function() {
     }
 
     console.log(this.readStatus);
-    
 
 };
+
 
 // Function that toggles the status of the book
 function removeBookWithID(id){
@@ -127,7 +126,7 @@ function addBookToLibrary(name, author, yearPublished, readStatus = false) {
     // Before appending the card to the list we'll add an even listener
 
     newBookCard.addEventListener("click", () => {
-        changeHighlightedBook(name, author, yearPublished, readStatus, bookID);
+        changeHighlightedBook(bookToAdd.name, bookToAdd.author, bookToAdd.yearPublished, bookToAdd.readStatus, bookID);
     });
 
     listOfBooks.append(newBookCard);
